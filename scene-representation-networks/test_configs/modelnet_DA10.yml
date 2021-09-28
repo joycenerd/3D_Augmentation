@@ -1,0 +1,11 @@
+# Configuration file for testing novel view synthesis on training set (see paper section 4, paragraph 4)
+# Datasets can be downloaded here: https://drive.google.com/drive/folders/1OkYgeRcIcLOFu1ft5mRODWNQaPJ0ps90
+
+# data_root: /eva_data/psa/datasets/srn_data/cars_train_test/ # Path to cars training_test set (cars from training set with novel views).
+data_root: /work/eva0856121/NVS/datasets/ModelNet40_auto_aligned_128/table/table_train # Path to cars training dataset.
+logging_root: ./logs/modelnet_DA10/table_train_imgfilter/         # one_shot_cars_new_RandomView_MV4_test4views_iter100000
+max_num_instances: 100 # The number of cars that the model was trained with.
+checkpoint: /work/eva0856121/NVS/code/scene-representation-networks/logs/modelnet_DA10/checkpoints/epoch_0013_iter_140000.pth # The path to the trained checkpoint
+# checkpoint: /work/eva0856121/code/outputs/srn_new_RandomView_MV4/checkpoints/epoch_0012_iter_100000.pth # The path to the trained checkpoint
+img_sidelength: 128
+batch_size: 16 # This is for a GPU with 48 GB of memory. Adapt accordingly for your GPU memory.

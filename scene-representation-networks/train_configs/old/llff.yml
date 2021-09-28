@@ -1,0 +1,10 @@
+# Configuration file for shapenet cars training (see paper section 4, paragraph 4)
+# Datasets can be downloaded here: https://drive.google.com/drive/folders/1OkYgeRcIcLOFu1ft5mRODWNQaPJ0ps90
+
+data_root: /work/eva0856121/datasets/srn_data/llff_train/ # Path to cars training dataset.
+logging_root: /work/eva0856121/code/outputs/srn_new_llff/
+img_sidelengths: 64,128
+batch_size_per_img_sidelength: 64,16 # This is for a GPU with 48 GB of memory. Adapt accordingly for your GPU memory.
+max_steps_per_img_sidelength: 500,17000
+max_num_observations_train: -1
+no_validation: True

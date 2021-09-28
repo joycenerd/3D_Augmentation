@@ -1,0 +1,8 @@
+# Configuration file for shapenet cars training (see paper section 4, paragraph 4)
+# Datasets can be downloaded here: https://drive.google.com/drive/folders/1OkYgeRcIcLOFu1ft5mRODWNQaPJ0ps90
+
+data_root: /work/eva0856121/datasets/srn_data/cars_train/ # Path to cars training dataset.
+checkpoint_path: /work/eva0856121/code/outputs/srn_new/checkpoints/epoch_0027_iter_175000.pth
+img_sidelengths: 128
+max_num_instances_train: -1
+max_num_observations_train: 50

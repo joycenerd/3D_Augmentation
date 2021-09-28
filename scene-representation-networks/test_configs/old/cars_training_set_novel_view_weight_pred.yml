@@ -1,0 +1,10 @@
+# Configuration file for testing novel view synthesis on training set (see paper section 4, paragraph 4)
+# Datasets can be downloaded here: https://drive.google.com/drive/folders/1OkYgeRcIcLOFu1ft5mRODWNQaPJ0ps90
+
+data_root: /eva_data/psa/datasets/srn_data/cars_test/ # Path to cars training_test set (cars from training set with novel views).
+logging_root: ./logs/one_shot_cars_new_iter175000/regression_200_randomview/
+num_instances: -1 # The number of cars that the model was trained with.
+checkpoint: /work/eva0856121/code/outputs/srn_new/checkpoints/epoch_0027_iter_175000.pth # The path to the trained checkpoint
+weight_pred_checkpoint_path: /work/eva0856121/code/outputs/srn_new/regression_200_randomview/model/analogy_15.pth
+img_sidelength: 128
+batch_size: 16 # This is for a GPU with 48 GB of memory. Adapt accordingly for your GPU memory.

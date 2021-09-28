@@ -1,0 +1,9 @@
+# Configuration file for shapenet cars training (see paper section 4, paragraph 4)
+# Datasets can be downloaded here: https://drive.google.com/drive/folders/1OkYgeRcIcLOFu1ft5mRODWNQaPJ0ps90
+
+data_root: /eva_data/psa/datasets/srn_data/cars_train/ # Path to cars training dataset.
+logging_root: /eva_data/psa/code/outputs/srn_new/test_3D  # regression_200_randomview/
+checkpoint_path: /eva_data/psa/code/outputs/srn_new/checkpoints/epoch_0027_iter_175000.pth
+img_sidelength: 128
+num_basis: 200
+specific_observation_idcs: 64

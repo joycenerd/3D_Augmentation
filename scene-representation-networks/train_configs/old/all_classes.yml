@@ -1,0 +1,12 @@
+# Configuration file for shapenet chairs training (see paper section 4, paragraph 4)
+# Datasets can be downloaded here: https://drive.google.com/drive/folders/1OkYgeRcIcLOFu1ft5mRODWNQaPJ0ps90
+
+data_root: /eva_data/psa/datasets/NMR_Dataset # Path to chairs training dataset.
+val_root: # Path to chairs validation set, consisting of the same cars as in the training set, but with novel camera views.
+logging_root: ./logs/all_200_no_inv_focal
+img_sidelengths: 64
+batch_size_per_img_sidelength: 16  # This is for a GPU with 48 GB of memory. Adapt accordingly for your GPU memory.
+max_steps_per_img_sidelength: 1000000
+max_num_instances_train: 200
+max_num_observations_train: -1
+train_class: all
