@@ -81,13 +81,13 @@ def cv_cam2world_to_bcam2world(cv_cam2world):
     cv_cam2world_rot = Matrix(cv_cam2world[:3, :3].tolist())
 
     cv_world2cam_rot = cv_cam2world_rot.transposed()
-    cv_translation = -1. * cv_world2cam_rot * cam_location
+    cv_translation = -1. * cv_world2cam_rot @ cam_location
 
     blender_world2cam_rot = R_bcam2cv * cv_world2cam_rot
-    blender_translation = R_bcam2cv * cv_translation
+    blender_translation = R_bcam2cv @ cv_translation
 
     blender_cam2world_rot = blender_world2cam_rot.transposed()
-    blender_cam_location = -1. * blender_cam2world_rot * blender_translation
+    blender_cam_location = -1. * blender_cam2world_rot @ blender_translation
 
     blender_matrix_world = Matrix((
         blender_cam2world_rot[0][:] + (blender_cam_location[0],),
