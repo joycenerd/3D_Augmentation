@@ -21,14 +21,14 @@ sys.path.append(os.path.join(ROOT_DIR, "models"))
 
 # Official
 parser = argparse.ArgumentParser("PointNet")
-parser.add_argument("--batch_size", type=int, default=24, help="Batch size in training [default: 24]")
+parser.add_argument("--batch_size", type=int, default=256, help="Batch size in training [default: 24]")
 parser.add_argument("--model", default="pointnet_cls", help="Model name [default: pointnet_cls]")
 parser.add_argument("--epoch",  default=200, type=int, help="Number of epoch in training [default: 200]")
 parser.add_argument("--learning_rate", default=0.001, type=float, help="Learning rate in training [default: 0.001]")
 parser.add_argument("--gpu", type=str, default="0", help="Specify gpu device [default: 0]")
 parser.add_argument("--num_point", type=int, default=1024, help="Point Number [default: 1024]")
 parser.add_argument("--optimizer", type=str, default="Adam", help="Optimizer for training [default: Adam]")
-parser.add_argument("--output_dir", type=str, default="/home/zchin/PointNet/all_real", help="Experiment root")
+parser.add_argument("--output_dir", type=str, default="/home/zchin/augmentation_output/PointNet/all_real", help="Experiment root")
 parser.add_argument("--decay_rate", type=float, default=1e-4, help="Decay rate [default: 1e-4]")
 # MSN_PointNet
 parser.add_argument("--sparsify_mode", type=str, default="random", choices=["PN", "random", "fps", "zorder", "multizorder"], help="Sparsify mode")
