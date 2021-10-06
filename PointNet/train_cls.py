@@ -28,7 +28,7 @@ parser.add_argument("--learning_rate", default=0.001, type=float, help="Learning
 parser.add_argument("--gpu", type=str, default="0", help="Specify gpu device [default: 0]")
 parser.add_argument("--num_point", type=int, default=1024, help="Point Number [default: 1024]")
 parser.add_argument("--optimizer", type=str, default="Adam", help="Optimizer for training [default: Adam]")
-parser.add_argument("--output_dir", type=str, default="/work/eva0856121/Augmentation/code/outputs/PointNet", help="Experiment root")
+parser.add_argument("--output_dir", type=str, default="/home/zchin/PointNet/all_real", help="Experiment root")
 parser.add_argument("--decay_rate", type=float, default=1e-4, help="Decay rate [default: 1e-4]")
 # MSN_PointNet
 parser.add_argument("--sparsify_mode", type=str, default="random", choices=["PN", "random", "fps", "zorder", "multizorder"], help="Sparsify mode")

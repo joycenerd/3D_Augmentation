@@ -279,11 +279,12 @@ class SRNsModel(nn.Module):
                               close=True)
 
             depth_maps_plot = util.lin2img(depth_maps)
-            writer.add_image(prefix + "pred_depth",
-                             torchvision.utils.make_grid(depth_maps_plot.repeat(1, 3, 1, 1),
-                                                         scale_each=True,
-                                                         normalize=True).cpu().detach().numpy(),
-                             iter)
+            with torch.no_grad():
+                writer.add_image(prefix + "pred_depth",
+                                torchvision.utils.make_grid(depth_maps_plot.repeat(1, 3, 1, 1),
+                                                            scale_each=True,
+                                                            normalize=True).cpu().detach().numpy(),
+                                iter)
 
         writer.add_scalar(prefix + "out_min", predictions.min(), iter)
         writer.add_scalar(prefix + "out_max", predictions.max(), iter)

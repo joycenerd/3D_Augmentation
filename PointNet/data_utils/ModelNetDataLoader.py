@@ -4,11 +4,11 @@ import numpy as np
 import open3d as o3d
 from torch.utils.data import Dataset
 import sys
-sys.path.append("/work/eva0856121/Augmentation/code/data_utils")
+sys.path.append("/home/zchin/3D_Augmentation/data_utils")
 from utils import *
 
 warnings.filterwarnings('ignore')
-root_dirs = {"ModelNet40": "/work/eva0856121/Augmentation/datasets/MN40_MN40_VI_inter",
+root_dirs = {"ModelNet40": "/eva_data_6/datasets_ours/MN40",
              "ModelNet10": "/eva_data/psa/datasets/PointNet/ModelNet10_pcd",
              "ShapeNet": "/eva_data/psa/datasets/MSN_PointNet/ShapeNetCore.v1",
              "ShapeNet_all": "/eva_data/psa/datasets/MSN_PointNet/ShapeNetCore.v1_all_10000"}
@@ -138,7 +138,7 @@ class ModelNetDataLoader(Dataset):
 if __name__ == '__main__':
     import torch
 
-    data = ModelNetDataLoader("/eva_data/psa/datasets/PointNet/ModelNet40_pcd", split="train")
+    data = ModelNetDataLoader(split="train")
     DataLoader = torch.utils.data.DataLoader(data, batch_size=12, shuffle=True)
     for point,label in DataLoader:
         print(point.shape)

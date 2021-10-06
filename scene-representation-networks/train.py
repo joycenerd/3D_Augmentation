@@ -107,6 +107,7 @@ def train():
                                              specific_observation_idcs=specific_observation_idcs,
                                              samples_per_instance=1,
                                              train_class= opt.train_class)
+    print("Load train dataset...")
 
     assert (len(img_sidelengths) == len(batch_size_per_sidelength)), \
         "Different number of image sidelengths passed than batch sizes."
@@ -127,6 +128,7 @@ def train():
                                     shuffle=False,
                                     drop_last=True,
                                     collate_fn=val_dataset.collate_fn)
+        print("Load validation dataset...")
 
     model = SRNsModel(latent_dim=opt.embedding_size,
                       has_params=opt.has_params,
@@ -136,6 +138,7 @@ def train():
 
     model.train()
     model.cuda()
+    print("Initialize model...")
 
     if opt.checkpoint_path is not None:
         print("Loading model from %s" % opt.checkpoint_path)
@@ -150,18 +153,23 @@ def train():
     util.cond_mkdir(opt.logging_root)
     util.cond_mkdir(ckpt_dir)
     util.cond_mkdir(events_dir)
+    print("Create logging dir...")
 
     # Save command-line parameters log directory.
     with open(os.path.join(opt.logging_root, "params.txt"), "w") as out_file:
         out_file.write('\n'.join(["%s: %s" % (key, value) for key, value in vars(opt).items()]))
+    print("Save command-line parameters log directory...")
 
     # Save text summary of model into log directory.
     with open(os.path.join(opt.logging_root, "model.txt"), "w") as out_file:
         out_file.write(str(model))
+    print("Save text summary of model into log directory...")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=opt.lr)
+    print("Set up optimizer...")
 
     writer = SummaryWriter(events_dir)
+    print("Set up tensorboard...")
     iter = opt.start_step
     epoch = iter // len(train_dataset)
     step = 0
