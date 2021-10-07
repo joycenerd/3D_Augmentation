@@ -1,0 +1,30 @@
+config_filepath: ./train_configs/modelnet_all.yml
+img_sidelengths: 64, 128
+max_steps_per_img_sidelength: 10000, 30000000
+batch_size_per_img_sidelength: 32, 8
+data_root: /eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_train
+val_root: # Path to cars validation set, consisting of the same cars as in the training set, but with novel camera views.
+logging_root: ./logs/modelnet_all_exp
+lr: 5e-05
+l1_weight: 200
+kl_weight: 1
+reg_weight: 0.001
+steps_til_ckpt: 10000
+steps_til_val: 1000
+no_validation: True
+preload: False
+checkpoint_path: None
+overwrite_embeddings: False
+start_step: 0
+specific_observation_idcs: None
+max_num_instances_train: -1
+max_num_observations_train: 50
+max_num_instances_val: 10
+max_num_observations_val: 10
+has_params: False
+train_class: None
+tracing_steps: 10
+freeze_networks: False
+use_unet_renderer: False
+embedding_size: 256
+gpu: 6

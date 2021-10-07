@@ -115,8 +115,9 @@ class SceneClassDataset(torch.utils.data.Dataset):
                  train_class=None):
 
         self.samples_per_instance = samples_per_instance
-        self.instance_dirs = sorted(glob(os.path.join(root_dir, "*/")))
-        # self.instance_dirs = sorted(glob(root_dir))
+        self.root_dir = root_dir
+        # self.instance_dirs = sorted(glob(os.path.join(root_dir, "*/")))
+        self.instance_dirs = self.load_choosen_data()
         
         assert (len(self.instance_dirs) != 0), "No objects in the data directory"
 
@@ -132,8 +133,16 @@ class SceneClassDataset(torch.utils.data.Dataset):
                               # for idx, dir in enumerate(self.instance_dirs) if "bed_" in dir]
         self.all_instances = self.all_instances
 
+
         self.num_per_instance_observations = [len(obj) for obj in self.all_instances]
         self.num_instances = len(self.all_instances)
+
+    def load_choosen_data(self):
+        f = open(self.root_dir,'r', encoding='utf-8')
+        choosen_dirs = []
+        for line in f:
+            choosen_dirs.append(line.strip())
+        return choosen_dirs
 
     def set_img_sidelength(self, new_img_sidelength):
         """For multi-resolution training: Updates the image sidelength with whichimages are loaded."""
@@ -191,10 +200,11 @@ class SceneClassDataset(torch.utils.data.Dataset):
 
 
 if __name__ == "__main__":
-    dataset = SceneClassDataset(root_dir = "/work/eva0856121/datasets/srn_data/cars_train/",
-                                max_num_instances=200,
+    dataset = SceneClassDataset(root_dir = "/home/zchin/augmentation_output/train_ratio_data/0.5/train_data_path.txt",
+                                max_num_instances=5000,
                                 max_observations_per_instance=50,
                                 img_sidelength=128,
                                 # specific_observation_idcs=[64,194],
-                                samples_per_instance=50)
+                                samples_per_instance=1)
+    print(len(dataset.instance_dirs))
     import pdb; pdb.set_trace()

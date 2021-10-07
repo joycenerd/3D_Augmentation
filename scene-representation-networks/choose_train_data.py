@@ -2,7 +2,7 @@ import argparse
 import os
 from pathlib import Path
 import math
-
+import random
 import numpy as np
 
 
@@ -26,12 +26,9 @@ for category in all_category:
     entries=os.listdir(train_dir)
     n=math.ceil(len(entries)*args.ratio)
     print(f'{category}: {n}')
-    idx=np.random.randint(low=0,high=len(entries),size=n)
+    idx = random.sample(range(len(entries)), n)
     for i in idx:
         entry='/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_train/'+entries[i]
         f.write(entry)
         f.write('\n')
 f.close()
-
-
-
