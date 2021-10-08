@@ -23,7 +23,7 @@ parser = argparse.ArgumentParser("PointNet")
 parser.add_argument("--batch_size", type=int, default=24, help="Batch size in training")
 parser.add_argument("--gpu", type=str, default='1', help="specify gpu device")
 parser.add_argument("--num_point", type=int, default=1024, help="Point Number [default: 1024]")
-parser.add_argument("--output_dir", type=str, required=True, help="PLZ input [/eva_data/psa/code/outputs/PointNet/classification/???")
+parser.add_argument("--output_dir", type=str, required=True, help="PLZ input [/home/zchin/augmentation_output/PointNet/???/")
 parser.add_argument("--num_votes", type=int, default=3, help="Aggregate classification scores with voting [default: 3]")
 args = parser.parse_args()
 

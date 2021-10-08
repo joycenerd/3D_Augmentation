@@ -65,6 +65,7 @@ class ModelNetDataLoader(Dataset):
         self.class_file = os.path.join(root_dir, obj_name_file)
         self.class_names = [line.rstrip() for line in open(self.class_file)]
         self.target_table = dict(zip(self.class_names, range(len(self.class_names))))
+        print(self.target_table)
 
         # Create datapath -> (shape_name, shape_pcd_file_pat)
         assert (split == "train" or split == "test"), "PLZ verify split should be [train, test]"
@@ -140,6 +141,6 @@ if __name__ == '__main__':
 
     data = ModelNetDataLoader(split="train")
     DataLoader = torch.utils.data.DataLoader(data, batch_size=12, shuffle=True)
-    for point,label in DataLoader:
-        print(point.shape)
-        print(label.shape)
+    #for point,label in DataLoader:
+        #print(point.shape)
+        #print(label.shape)

@@ -1,5 +1,7 @@
 import configargparse
-import os, time, datetime
+import os
+import time
+import datetime
 
 import torch
 from torch.utils.tensorboard import SummaryWriter
@@ -12,7 +14,8 @@ from srns import *
 import util
 
 p = configargparse.ArgumentParser()
-p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
+p.add('-c', '--config_filepath', required=False,
+      is_config_file=True, help='Path to config file.')
 
 # Multi-resolution training: Instead of passing only a single value, each of these command-line arguments take comma-
 # separated lists. If no multi-resolution training is required, simply pass single values (see default values).
@@ -28,12 +31,15 @@ p.add_argument('--batch_size_per_img_sidelength', type=str, default="64",
                     'If comma-separated list, will train each image sidelength with respective batch size.')
 
 # Training options
-p.add_argument('--data_root', required=True, help='Path to directory with training data.')
-p.add_argument('--val_root', required=False, help='Path to directory with validation data.')
+p.add_argument('--data_root', required=True,
+               help='Path to directory with training data.')
+p.add_argument('--val_root', required=False,
+               help='Path to directory with validation data.')
 p.add_argument('--logging_root', type=str, default='./logs',
                required=False, help='path to directory where checkpoints & tensorboard events will be saved.')
 
-p.add_argument('--lr', type=float, default=5e-5, help='learning rate. default=5e-5')
+p.add_argument('--lr', type=float, default=5e-5,
+               help='learning rate. default=5e-5')
 
 p.add_argument('--l1_weight', type=float, default=200,
                help='Weight for l1 loss term (lambda_img in paper).')
@@ -73,11 +79,13 @@ p.add_argument('--max_num_observations_val', type=int, default=10, required=Fals
 
 p.add_argument('--has_params', action='store_true', default=False,
                help='Whether each object instance already comes with its own parameter vector.')
-p.add_argument("--train_class", type=str, required=False, help="Choose category to train")
+p.add_argument("--train_class", type=str, required=False,
+               help="Choose category to train")
 
 
 # Model options
-p.add_argument('--tracing_steps', type=int, default=10, help='Number of steps of intersection tester.')
+p.add_argument('--tracing_steps', type=int, default=10,
+               help='Number of steps of intersection tester.')
 p.add_argument('--freeze_networks', action='store_true',
                help='Whether to freeze weights of all networks in SRN (not the embeddings!).')
 p.add_argument('--use_unet_renderer', action='store_true',
@@ -89,16 +97,20 @@ p.add_argument("--gpu", type=str, required=True, help="Choose GPU number")
 opt = p.parse_args()
 os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
 
+
 def train():
     # Parses indices of specific observations from comma-separated list.
     if opt.specific_observation_idcs is not None:
-        specific_observation_idcs = util.parse_comma_separated_integers(opt.specific_observation_idcs)
+        specific_observation_idcs = util.parse_comma_separated_integers(
+            opt.specific_observation_idcs)
     else:
         specific_observation_idcs = None
 
     img_sidelengths = util.parse_comma_separated_integers(opt.img_sidelengths)
-    batch_size_per_sidelength = util.parse_comma_separated_integers(opt.batch_size_per_img_sidelength)
-    max_steps_per_sidelength = util.parse_comma_separated_integers(opt.max_steps_per_img_sidelength)
+    batch_size_per_sidelength = util.parse_comma_separated_integers(
+        opt.batch_size_per_img_sidelength)
+    max_steps_per_sidelength = util.parse_comma_separated_integers(
+        opt.max_steps_per_img_sidelength)
 
     train_dataset = dataio.SceneClassDataset(root_dir=opt.data_root,
                                              max_num_instances=opt.max_num_instances_train,
@@ -106,7 +118,7 @@ def train():
                                              img_sidelength=img_sidelengths[0],
                                              specific_observation_idcs=specific_observation_idcs,
                                              samples_per_instance=1,
-                                             train_class= opt.train_class)
+                                             train_class=opt.train_class)
     print("Load train dataset...")
 
     assert (len(img_sidelengths) == len(batch_size_per_sidelength)), \
@@ -157,7 +169,8 @@ def train():
 
     # Save command-line parameters log directory.
     with open(os.path.join(opt.logging_root, "params.txt"), "w") as out_file:
-        out_file.write('\n'.join(["%s: %s" % (key, value) for key, value in vars(opt).items()]))
+        out_file.write('\n'.join(["%s: %s" % (key, value)
+                       for key, value in vars(opt).items()]))
     print("Save command-line parameters log directory...")
 
     # Save text summary of model into log directory.
@@ -176,11 +189,13 @@ def train():
 
     print('Beginning training...')
     # This loop implements training with an increasing image sidelength.
-    cum_max_steps = 0  # Tracks max_steps cumulatively over all image sidelengths.
+    # Tracks max_steps cumulatively over all image sidelengths.
+    cum_max_steps = 0
     for img_sidelength, max_steps, batch_size in zip(img_sidelengths, max_steps_per_sidelength,
                                                      batch_size_per_sidelength):
         print("\n" + "#" * 10)
-        print("Training with sidelength %d for %d steps with batch size %d" % (img_sidelength, max_steps, batch_size))
+        print("Training with sidelength %d for %d steps with batch size %d" %
+              (img_sidelength, max_steps, batch_size))
         print("#" * 10 + "\n")
         train_dataset.set_img_sidelength(img_sidelength)
 
@@ -202,7 +217,8 @@ def train():
                 optimizer.zero_grad()
 
                 dist_loss = model.get_image_loss(model_outputs, ground_truth)
-                reg_loss = model.get_regularization_loss(model_outputs, ground_truth)
+                reg_loss = model.get_regularization_loss(
+                    model_outputs, ground_truth)
                 latent_loss = model.get_latent_loss()
 
                 weighted_dist_loss = opt.l1_weight * dist_loss
@@ -221,9 +237,12 @@ def train():
                       (iter, epoch, weighted_dist_loss, weighted_latent_loss, weighted_reg_loss))
 
                 model.write_updates(writer, model_outputs, ground_truth, iter)
-                writer.add_scalar("scaled_distortion_loss", weighted_dist_loss, iter)
-                writer.add_scalar("scaled_regularization_loss", weighted_reg_loss, iter)
-                writer.add_scalar("scaled_latent_loss", weighted_latent_loss, iter)
+                writer.add_scalar("scaled_distortion_loss",
+                                  weighted_dist_loss, iter)
+                writer.add_scalar("scaled_regularization_loss",
+                                  weighted_reg_loss, iter)
+                writer.add_scalar("scaled_latent_loss",
+                                  weighted_latent_loss, iter)
                 writer.add_scalar("total_loss", total_loss, iter)
 
                 if iter % opt.steps_til_val == 0 and not opt.no_validation:
@@ -237,15 +256,19 @@ def train():
                         for model_input, ground_truth in val_dataloader:
                             model_outputs = model(model_input)
 
-                            dist_loss = model.get_image_loss(model_outputs, ground_truth).cpu().numpy()
-                            psnr, ssim = model.get_psnr(model_outputs, ground_truth)
+                            dist_loss = model.get_image_loss(
+                                model_outputs, ground_truth).cpu().numpy()
+                            psnr, ssim = model.get_psnr(
+                                model_outputs, ground_truth)
                             psnrs.append(psnr)
                             ssims.append(ssim)
                             dist_losses.append(dist_loss)
 
-                            model.write_updates(writer, model_outputs, ground_truth, iter, prefix='val_')
+                            model.write_updates(
+                                writer, model_outputs, ground_truth, iter, prefix='val_')
 
-                        writer.add_scalar("val_dist_loss", np.mean(dist_losses), iter)
+                        writer.add_scalar(
+                            "val_dist_loss", np.mean(dist_losses), iter)
                         writer.add_scalar("val_psnr", np.mean(psnrs), iter)
                         writer.add_scalar("val_ssim", np.mean(ssims), iter)
                     model.train()
@@ -258,7 +281,8 @@ def train():
 
                 if iter % opt.steps_til_ckpt == 0:
                     util.custom_save(model,
-                                     os.path.join(ckpt_dir, 'epoch_%04d_iter_%06d.pth' % (epoch, iter)),
+                                     os.path.join(
+                                         ckpt_dir, 'epoch_%04d_iter_%06d.pth' % (epoch, iter)),
                                      discriminator=None,
                                      optimizer=optimizer)
 
@@ -267,20 +291,22 @@ def train():
             epoch += 1
 
     util.custom_save(model,
-                     os.path.join(ckpt_dir, 'epoch_%04d_iter_%06d.pth' % (epoch, iter)),
+                     os.path.join(
+                         ckpt_dir, 'epoch_%04d_iter_%06d.pth' % (epoch, iter)),
                      discriminator=None,
                      optimizer=optimizer)
+
 
 def save_mode_feature():
     import pickle
     img_sidelengths = util.parse_comma_separated_integers(opt.img_sidelengths)
-    
+
     dataset = dataio.SceneClassDataset(root_dir=opt.data_root,
-                                             max_num_instances=opt.max_num_instances_train,
-                                             max_observations_per_instance=opt.max_num_observations_train,
-                                             img_sidelength=img_sidelengths[0],
-                                             specific_observation_idcs=opt.specific_observation_idcs,
-                                             samples_per_instance=1)
+                                       max_num_instances=opt.max_num_instances_train,
+                                       max_observations_per_instance=opt.max_num_observations_train,
+                                       img_sidelength=img_sidelengths[0],
+                                       specific_observation_idcs=opt.specific_observation_idcs,
+                                       samples_per_instance=1)
     print("There are {} images in dataset".format(len(dataset)))
     model = SRNsModel(num_instances=dataset.num_instances,
                       latent_dim=opt.embedding_size,
@@ -300,14 +326,14 @@ def save_mode_feature():
                          overwrite_embeddings=opt.overwrite_embeddings)
     else:
         print("Checkpoint is not exist")
-    
+
     model.cuda()
     model.eval()
     feature_dir = "./pretrained_model/srn_new/features/"
     util.cond_mkdir(feature_dir)
     with torch.no_grad():
-        features = [] # shape 512
-        embeddings = [] # shape 256
+        features = []  # shape 512
+        embeddings = []  # shape 256
         tmp_feat = []
         tmp_emb = []
         for i in range(len(dataset)):
@@ -316,22 +342,26 @@ def save_mode_feature():
                 print("Avg features")
                 tmp_feat = torch.stack(tmp_feat).float()
                 tmp_emb = torch.stack(tmp_emb).float()
-                features.append(torch.mean(tmp_feat, dim=0,keepdim=True))
-                embeddings.append(torch.mean(tmp_emb, dim=0,keepdim=True))
+                features.append(torch.mean(tmp_feat, dim=0, keepdim=True))
+                embeddings.append(torch.mean(tmp_emb, dim=0, keepdim=True))
                 tmp_feat = []
                 tmp_emb = []
-            input_img = dataset[i][0][0]["input_img"].cuda().float().unsqueeze(0)
-            feat = model.resnet(input_img).squeeze() 
+            input_img = dataset[i][0][0]["input_img"].cuda(
+            ).float().unsqueeze(0)
+            feat = model.resnet(input_img).squeeze()
             tmp_feat.append(feat)
             embed = model.pre_phi(feat)
             tmp_emb.append(embed)
-        output = open(os.path.join(feature_dir,'cars_train_feature_all.pkl'), 'wb')
+        output = open(os.path.join(
+            feature_dir, 'cars_train_feature_all.pkl'), 'wb')
         pickle.dump(features, output)
         output.close()
 
-        output = open(os.path.join(feature_dir,'cars_train_embedding_all.pkl'), 'wb')
+        output = open(os.path.join(
+            feature_dir, 'cars_train_embedding_all.pkl'), 'wb')
         pickle.dump(embeddings, output)
         output.close()
+
 
 def main():
     train()
