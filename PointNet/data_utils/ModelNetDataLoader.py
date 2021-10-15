@@ -18,14 +18,13 @@ obj_name_files = {"ModelNet40": "ModelNet40_names.txt", #"ModelNet40_ourDA10_nam
                   "ShapeNet_all": "ShapeNetCore.v1_all_ID.txt"}
 # root_dir = "/eva_data/psa/datasets/PointNet/ModelNet40_pcd_SampleNet/64_zorder_keep50"
 
-def rotate_point_cloud(pcd):
-    """ Randomly rotate the point clouds to augument the dataset
+"""def rotate_point_cloud(pcd):
+    Randomly rotate the point clouds to augument the dataset
         rotation is per shape based along up direction
         Input:
           Nx3 array, original point clouds
         Return:
           Nx3 array, rotated point clouds
-    """
     # Create rotation matrix
     angle_x = np.random.uniform() * 2 * np.pi
     # angle_y = np.random.uniform() * 2 * np.pi
@@ -49,13 +48,14 @@ def rotate_point_cloud(pcd):
     R = Ry
     rotated_pcd = np.dot(pcd, R)
 
-    return rotated_pcd.astype(np.float32)
+    return rotated_pcd.astype(np.float32)"""
 
 class ModelNetDataLoader(Dataset):
-    def __init__(self,  npoint=1024, split="train", sparsify_mode="PN", dataset_mode="ModelNet40", zorder_mode="keep", cache_size=15000):
+    def __init__(self,  npoint=1024, split="train", sparsify_mode="PN", dataset_mode="ModelNet40", zorder_mode="keep", cache_size=15000,data_txt=None):
         self.npoints = npoint
         self.sparsify_mode = "random"  #sparsify_mode
         self.zorder_mode = zorder_mode
+        self.data_txt=data_txt
 
         assert (dataset_mode == "ModelNet40" or dataset_mode == "ModelNet10" or dataset_mode == "ShapeNet" or dataset_mode == "ShapeNet_all"), "PLZ verify dataset_mode should be [ModelNet40, ModelNet10, ShapeNet, ShapeNet_all]"
         root_dir = root_dirs[dataset_mode]
@@ -70,21 +70,34 @@ class ModelNetDataLoader(Dataset):
         # Create datapath -> (shape_name, shape_pcd_file_pat)
         assert (split == "train" or split == "test"), "PLZ verify split should be [train, test]"
         self.datapath = [] # list of (shape_name, shape_pcd_file_path) tuple
-        for class_name in self.class_names:
-            file_dir = os.path.join(root_dir, class_name, split)
-            # print(file_dir)
-            if os.path.exists(file_dir):
-                filenames = os.listdir(file_dir)
-                for filename in filenames:
-                    # if "aug" not in filename:
-                    file_path = os.path.join(file_dir, filename)
-                    self.datapath.append((class_name, file_path))
+        if split=='test':
+            for class_name in self.class_names:
+                file_dir = os.path.join(root_dir, class_name, split)
+                # print(file_dir)
+                if os.path.exists(file_dir):
+                    filenames = os.listdir(file_dir)
+                    for filename in filenames:
+                        # if "aug" not in filename:
+                        file_path = os.path.join(file_dir, filename)
+                        self.datapath.append((class_name, file_path))
+        elif split=='train':
+            entries=self.load_choosen_data()
+            for entry in entries:
+                print(entry)
+        
         
         print("The size of %s data is %d" % (split, len(self.datapath)))
 
         # Record loaded data
         self.cache_size = cache_size  # How many data points to cache in memory
         self.cache = {}  # From index to (points, target) tuple
+    
+    def load_choosen_data(self):
+        f = open(self.data_txt,'r', encoding='utf-8')
+        choosen_dirs = []
+        for line in f:
+            choosen_dirs.append(line.strip())
+        return choosen_dirs
 
     def __getitem__(self, index):
         if index in self.cache:
@@ -103,8 +116,8 @@ class ModelNetDataLoader(Dataset):
             points = pcd_normalize(points) # Normalize points
 
             # Rotate augmentation
-            if "aug_" in classname_target_pair[1]:
-                points = rotate_point_cloud(points)
+            # if "aug_" in classname_target_pair[1]:
+                # points = rotate_point_cloud(points)
 
             # Various sparsify mode
             if self.sparsify_mode == "PN":

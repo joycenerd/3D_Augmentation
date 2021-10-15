@@ -35,6 +35,7 @@ parser.add_argument("--sparsify_mode", type=str, default="random", choices=["PN"
 parser.add_argument("--dataset_mode", type=str, default="ModelNet40", choices=["ModelNet40", "ModelNet10", "ShapeNet", "ShapeNet_all"], help="Dataset mode. PLZ choose in [ModelNet40, ModelNet10, ShapeNet, ShapeNet_all]")
 parser.add_argument("--zorder_mode", type=str, default="keep", choices=["keep", "discard"], help="Zorder sampled mode. PLZ choose in [keep, discard]")
 parser.add_argument("--trans_feat", action="store_true", default=False, help='Whether to use transform feature')
+parser.add_argument('--data-txt',type=str,help="training data txt file")
 args = parser.parse_args()
 
 # HYPER PARAMETER
@@ -91,7 +92,7 @@ def create_dataloader():
     print("Load " + args.dataset_mode + " as dataset ...")
 
     # Create training dataloader
-    TRAIN_DATASET = ModelNetDataLoader(npoint=args.num_point, split="train", sparsify_mode=args.sparsify_mode, dataset_mode=args.dataset_mode, zorder_mode=args.zorder_mode)
+    TRAIN_DATASET = ModelNetDataLoader(npoint=args.num_point, split="train", sparsify_mode=args.sparsify_mode, dataset_mode=args.dataset_mode, zorder_mode=args.zorder_mode,data_txt=args.data_txt)
     trainDataLoader = torch.utils.data.DataLoader(TRAIN_DATASET, batch_size=args.batch_size, shuffle=True, num_workers=4, drop_last=True)
     
     # Create testing dataloader
@@ -231,7 +232,7 @@ if __name__ == "__main__":
     trainDataLoader, testDataLoader = create_dataloader()
 
     # Create network (classifier), optimizer, scheduler
-    classifier, criterion, optimizer, scheduler, start_epoch = create_network()
+    """classifier, criterion, optimizer, scheduler, start_epoch = create_network()
 
     # Setup parameters for training and testing
     global_epoch = 0
@@ -282,4 +283,4 @@ if __name__ == "__main__":
         np.save(os.path.join(output_dir, "train_save.npy"), train_save)
         np.save(os.path.join(output_dir, "test_save.npy"), test_save)
 
-    logger.info("End of training...")
+    logger.info("End of training...")"""
