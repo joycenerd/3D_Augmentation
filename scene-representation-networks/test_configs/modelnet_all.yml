@@ -2,9 +2,9 @@
 # Datasets can be downloaded here: https://drive.google.com/drive/folders/1OkYgeRcIcLOFu1ft5mRODWNQaPJ0ps90
 
 # data_root: /eva_data/psa/datasets/srn_data/cars_train_test/ # Path to cars training_test set (cars from training set with novel views).
-data_root: /work/eva0856121/NVS/datasets/ModelNet40_auto_aligned_128/all/all_train # Path to cars training dataset.
-logging_root: ./logs/modelnet_all_VI/inter_4      # one_shot_cars_new_RandomView_MV4_test4views_iter100000
+data_root: /eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_test # Path to cars training dataset.
+logging_root: /home/zchin/augmentation_output/SRN/test/real_0.5/iter_52500      # one_shot_cars_new_RandomView_MV4_test4views_iter100000
 num_instances: -1 # The number of cars that the model was trained with.
-checkpoint: /work/eva0856121/NVS/code/scene-representation-networks/logs/modelnet_all_VI/checkpoints/epoch_0020_iter_620000.pth # The path to the trained checkpoint
+checkpoint: /home/zchin/augmentation_output/SRN/real_0.5/checkpoints/epoch_0000_iter_052500.pth # The path to the trained checkpoint
 img_sidelength: 128
 batch_size: 16 # This is for a GPU with 48 GB of memory. Adapt accordingly for your GPU memory.

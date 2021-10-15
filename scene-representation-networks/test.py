@@ -42,10 +42,11 @@ p.add_argument('--use_unet_renderer', action='store_true',
                help='Whether to use a DeepVoxels-style unet as rendering network or a per-pixel 1x1 convnet')
 p.add_argument('--embedding_size', type=int, default=256,
                help='Dimensionality of latent embedding.')
+p.add_argument('--gpu',type=str,required=True)
 
 opt = p.parse_args()
 
-device = torch.device('cuda')
+device = torch.device(opt.gpu)
 
 
 def test():
@@ -59,7 +60,8 @@ def test():
                                        specific_observation_idcs=specific_observation_idcs,
                                        max_observations_per_instance=-1,
                                        samples_per_instance=1,
-                                       img_sidelength=opt.img_sidelength)
+                                       img_sidelength=opt.img_sidelength,
+                                       mode="test")
     dataset = DataLoader(dataset,
                          collate_fn=dataset.collate_fn,
                          batch_size=1,

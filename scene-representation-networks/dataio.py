@@ -112,12 +112,16 @@ class SceneClassDataset(torch.utils.data.Dataset):
                  max_observations_per_instance=-1,
                  specific_observation_idcs=None,  # For few-shot case: Can pick specific observations only
                  samples_per_instance=2,
-                 train_class=None):
+                 train_class=None,
+                 mode="train"):
 
         self.samples_per_instance = samples_per_instance
         self.root_dir = root_dir
-        # self.instance_dirs = sorted(glob(os.path.join(root_dir, "*/")))
-        self.instance_dirs = self.load_choosen_data()
+        if mode == "train":
+            self.instance_dirs = self.load_choosen_data()
+        elif mode == "test":
+            self.instance_dirs = sorted(glob(os.path.join(root_dir, "*/")))
+
         
         assert (len(self.instance_dirs) != 0), "No objects in the data directory"
 

@@ -48,7 +48,7 @@ p.add_argument('--kl_weight', type=float, default=1,
 p.add_argument('--reg_weight', type=float, default=1e-3,
                help='Weight for depth regularization term (lambda_depth in paper).')
 
-p.add_argument('--steps_til_ckpt', type=int, default=10000,
+p.add_argument('--steps_til_ckpt', type=int, default=2500,
                help='Number of iterations until checkpoint is saved.')
 p.add_argument('--steps_til_val', type=int, default=1000,
                help='Number of iterations until validation set is run.')
@@ -118,7 +118,8 @@ def train():
                                              img_sidelength=img_sidelengths[0],
                                              specific_observation_idcs=specific_observation_idcs,
                                              samples_per_instance=1,
-                                             train_class=opt.train_class)
+                                             train_class=opt.train_class,
+                                             mode="train")
     print("Load train dataset...")
 
     assert (len(img_sidelengths) == len(batch_size_per_sidelength)), \
