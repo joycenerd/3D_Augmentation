@@ -51,7 +51,7 @@ obj_name_files = {"ModelNet40": "ModelNet40_names.txt", #"ModelNet40_ourDA10_nam
     return rotated_pcd.astype(np.float32)"""
 
 class ModelNetDataLoader(Dataset):
-    def __init__(self,  npoint=1024, split="train", sparsify_mode="PN", dataset_mode="ModelNet40", zorder_mode="keep", cache_size=15000,data_txt=None):
+    def __init__(self,  npoint=1024, split="train", sparsify_mode="PN", dataset_mode="ModelNet40", zorder_mode="keep", cache_size=15000,data_txt=None,augment_data_dir=None):
         self.npoints = npoint
         self.sparsify_mode = "random"  #sparsify_mode
         self.zorder_mode = zorder_mode
@@ -81,9 +81,25 @@ class ModelNetDataLoader(Dataset):
                         file_path = os.path.join(file_dir, filename)
                         self.datapath.append((class_name, file_path))
         elif split=='train':
+            # load real data
             entries=self.load_choosen_data()
             for entry in entries:
-                print(entry)
+                entry_name=entry.split('/')[-1]
+                class_name=entry_name.split('_')[0]
+                pcd_name=entry_name+'.pcd'
+                file_path=os.path.join(root_dir,class_name,split,pcd_name)
+                self.datapath.append((class_name,file_path))
+            
+            # load augment data
+            for class_name in self.class_names:
+                file_dir = os.path.join(augment_data_dir, class_name)
+                if os.path.exists(file_dir):
+                    filenames = os.listdir(file_dir)
+                    for filename in filenames:
+                        # if "aug" not in filename:
+                        file_path = os.path.join(file_dir, filename)
+                        self.datapath.append((class_name, file_path))
+                
         
         
         print("The size of %s data is %d" % (split, len(self.datapath)))
