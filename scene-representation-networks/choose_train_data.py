@@ -9,7 +9,7 @@ import numpy as np
 parser=argparse.ArgumentParser()
 parser.add_argument('--ratio',type=float,default=0.5,help='real data ratio')
 parser.add_argument('--data-root',type=str,default='/eva_data_6/datasets_raw/ModelNet40_auto_aligned',help='complete training data path')
-parser.add_argument('--out-dir',type=str,default='/home/zchin/augmentation_output/train_ratio_data')
+parser.add_argument('--out-dir',type=str,default='/home/zchin/augmentation_output/ratio_data')
 args=parser.parse_args()
 
 args.out_dir=f'{args.out_dir}/{args.ratio}'

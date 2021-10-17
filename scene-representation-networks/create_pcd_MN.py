@@ -3,7 +3,7 @@ import random
 import numpy as np 
 import open3d as o3d
 
-data_root = "/work/eva0856121/NVS/datasets/ModelNet40_auto_aligned_128/all/all_train"
+data_root = "/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_trian/"
 instance_dirs = sorted(os.listdir(data_root))
 cate_list = []
 for instance_dir in instance_dirs:
@@ -58,7 +58,7 @@ def save_point_cloud(root_path, output_dir):
 
 if __name__ == "__main__":
     
-    root_path = "./3D_points/modelnet_all_VI_inter/7_3/"
-    output_dir = "/work/eva0856121/Augmentation/datasets/MN40_VI_inter_10views/"
+    root_path = "/home/zchin/augmentation_output/SRN/test/real_0.5"
+    output_dir = "/home/zchin/augmentation_output/3D_points/real_0.5"
     
     save_point_cloud(root_path, output_dir)

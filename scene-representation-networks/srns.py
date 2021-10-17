@@ -359,16 +359,17 @@ class SRNsModel(nn.Module):
         '''
         
         # Inference time - Save 3D information (open in testing time)
-        '''
-        pc_dir_path = os.path.join("./3D_points/modelnet_all_VI_inter/7_3/") #, "%s_train" %(category))
+        # '''
+        pc_dir_path = os.path.join("/home/zchin/augmentation_output/SRN/test/real_0.3") #, "%s_train" %(category))
         os.makedirs(pc_dir_path, exist_ok=True)
         pc_path = pc_dir_path + '/' + str(instance_idcs.item()) + '_' + gt_path.split('/')[-1][:-4]
         np.save( pc_path + "_embedding.npy", self.embedding.cpu().numpy())
         np.save(pc_path + "_points.npy", points_xyz.cpu().numpy())
         np.save(pc_path + "_rgb.npy", novel_views.cpu().numpy())
         with open(os.path.join(pc_dir_path, "inter_ID.txt"), "a") as fp:
-            print("%06d %06d %s" %(instance_idcs.item(), int(embedding2_idcs), category_embed2), file=fp)
-        '''
+            # print("%06d %06d %s" %(instance_idcs.item(), int(embedding2_idcs), category_embed2), file=fp)
+            print("%06d %06d %s" %(instance_idcs.item(), int(instance_idcs), str(instance_idcs)), file=fp)
+        # '''
 
         # Calculate normal map
         with torch.no_grad():
