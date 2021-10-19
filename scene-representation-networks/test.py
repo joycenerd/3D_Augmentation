@@ -43,6 +43,7 @@ p.add_argument('--use_unet_renderer', action='store_true',
 p.add_argument('--embedding_size', type=int, default=256,
                help='Dimensionality of latent embedding.')
 p.add_argument('--gpu',type=str,required=True)
+p.add_argument("--ratio", type=float, required=True, help="The ratio of real data")
 
 opt = p.parse_args()
 
@@ -72,7 +73,9 @@ def test():
                       latent_dim=opt.embedding_size,
                       has_params=opt.has_params,
                       use_unet_renderer=opt.use_unet_renderer,
-                      tracing_steps=opt.tracing_steps)
+                      tracing_steps=opt.tracing_steps,
+                      mode="test",
+                      ratio=opt.ratio)
 
     assert (opt.checkpoint_path is not None), "Have to pass checkpoint!"
 

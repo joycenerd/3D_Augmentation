@@ -93,6 +93,7 @@ p.add_argument('--use_unet_renderer', action='store_true',
 p.add_argument('--embedding_size', type=int, default=256,
                help='Dimensionality of latent embedding.')
 p.add_argument("--gpu", type=str, required=True, help="Choose GPU number")
+p.add_argument("--ratio", type=float, required=True, help="The ratio of real data")
 
 opt = p.parse_args()
 os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
@@ -147,7 +148,9 @@ def train():
                       has_params=opt.has_params,
                       use_unet_renderer=opt.use_unet_renderer,
                       tracing_steps=opt.tracing_steps,
-                      freeze_networks=opt.freeze_networks)
+                      freeze_networks=opt.freeze_networks,
+                      mode="train",
+                      ratio=opt.ratio)
 
     model.train()
     model.cuda()
@@ -314,6 +317,8 @@ def save_mode_feature():
                       has_params=opt.has_params,
                       use_unet_renderer=opt.use_unet_renderer,
                       tracing_steps=opt.tracing_steps,
+                      mode="train",
+                      ratio=opt.ratio
                       )
     for child in model.children():
         for param in child.parameters():

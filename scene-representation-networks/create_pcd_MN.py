@@ -3,6 +3,11 @@ import random
 import numpy as np 
 import open3d as o3d
 import re
+import argparse
+
+parser=argparse.ArgumentParser()
+parser.add_argument('--ratio',type=float, required=True, help='real data ratio')
+args=parser.parse_args()
 
 data_root = "/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_train/"
 instance_dirs = sorted(os.listdir(data_root))
@@ -66,7 +71,10 @@ def save_point_cloud(root_path, output_dir, choosen_path):
 
 if __name__ == "__main__":
     
-    root_path = "/home/zchin/augmentation_output/SRN/test/real_0.5"
-    output_dir = "/home/zchin/augmentation_output/3D_points/real_0.5"
-    choosen_path = "/home/zchin/augmentation_output/ratio_data/0.5/test_data_path.txt"
-    save_point_cloud(root_path, output_dir, choosen_path)
+    root_path = f"/home/zchin/augmentation_output/SRN/test/real_{args.ratio}"
+    output_dir = f"/home/zchin/augmentation_output/3D_points/real_{args.ratio}"
+    choosen_path = f"/home/zchin/augmentation_output/ratio_data/{args.ratio}/test_data_path.txt"
+    print(root_path)
+    print(output_dir)
+    print(choosen_path)
+    # save_point_cloud(root_path, output_dir, choosen_path)
