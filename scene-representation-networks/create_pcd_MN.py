@@ -2,8 +2,9 @@ import os
 import random
 import numpy as np 
 import open3d as o3d
+import re
 
-data_root = "/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_trian/"
+data_root = "/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_train/"
 instance_dirs = sorted(os.listdir(data_root))
 cate_list = []
 for instance_dir in instance_dirs:
@@ -40,17 +41,24 @@ def write_pcd(point, output_pcd_path):
     # Output pcd file
     o3d.io.write_point_cloud(output_pcd_path, pcd)
 
-def save_point_cloud(root_path, output_dir):
+def load_test_dirs(choosen_path):
+    f = open(choosen_path,'r', encoding='utf-8')
+    choosen_dirs = []
+    for line in f:
+        choosen_dirs.append(line.strip())
+    return choosen_dirs
+
+def save_point_cloud(root_path, output_dir, choosen_path):
     # Note 2055, 3701, 3793 有問題
-    for i in range(8500, 9843):
+    test_dirs = load_test_dirs(choosen_path)
+    for i in range(len(test_dirs)):
         random_view = random.sample(range(50), 10)
-        cate = cate_list[i]
+        cate = test_dirs[i].split("/")[-1][:-5]
         points = []
         for view in random_view:
             content, _ = read_pcd(root_path, str(i), str(view))
             points.extend(content)
-        
-        if len(points) >= 1024:
+        if len(points) > 0:
             output_pcd_dir = os.path.join(output_dir, cate)
             os.makedirs(output_pcd_dir, exist_ok=True)
             write_pcd(np.array(points), output_pcd_dir + '/' + "%06d.pcd" %(int(i)))
@@ -60,5 +68,5 @@ if __name__ == "__main__":
     
     root_path = "/home/zchin/augmentation_output/SRN/test/real_0.5"
     output_dir = "/home/zchin/augmentation_output/3D_points/real_0.5"
-    
-    save_point_cloud(root_path, output_dir)
+    choosen_path = "/home/zchin/augmentation_output/ratio_data/0.5/test_data_path.txt"
+    save_point_cloud(root_path, output_dir, choosen_path)

@@ -85,7 +85,7 @@ class ModelNetDataLoader(Dataset):
             entries=self.load_choosen_data()
             for entry in entries:
                 entry_name=entry.split('/')[-1]
-                class_name=entry_name.split('_')[0]
+                class_name=entry_name[:-5]
                 pcd_name=entry_name+'.pcd'
                 file_path=os.path.join(root_dir,class_name,split,pcd_name)
                 self.datapath.append((class_name,file_path))

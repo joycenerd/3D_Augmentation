@@ -5,6 +5,7 @@ from glob import glob
 from random import sample
 import data_util
 import util
+from pathlib import Path
 
 
 def pick(list, item_idcs):
@@ -118,11 +119,7 @@ class SceneClassDataset(torch.utils.data.Dataset):
         self.samples_per_instance = samples_per_instance
         self.root_dir = root_dir
         # self.instance_dirs = sorted(glob(os.path.join(root_dir, "*/")))
-
-        if mode == "train":
-            self.instance_dirs = self.load_train_data()
-        elif mode == "test":
-            self.instance_dirs = self.load_test_data()
+        self.instance_dirs = self.load_data()
 
         
         assert (len(self.instance_dirs) != 0), "No objects in the data directory"
@@ -143,29 +140,13 @@ class SceneClassDataset(torch.utils.data.Dataset):
         self.num_per_instance_observations = [len(obj) for obj in self.all_instances]
         self.num_instances = len(self.all_instances)
 
-    def load_train_data(self):
+    def load_data(self):
         f = open(self.root_dir,'r', encoding='utf-8')
         choosen_dirs = []
         for line in f:
             choosen_dirs.append(line.strip())
         return choosen_dirs
     
-    def load_test_data(self):
-        f = open(self.root_dir,'r', encoding='utf-8')
-        choosen_dirs = []
-        for line in f:
-            choosen_dirs.append(line.strip())
-        remain_dirs = []
-        all_category=os.listdir('/eva_data_6/datasets_raw/ModelNet40_auto_aligned')
-        for category in all_category:
-            if category=='modelnet40_auto_aligned.tar':
-                continue
-            train_dir=Path('/eva_data_6/datasets_raw/ModelNet40_auto_aligned').joinpath(category,'train')
-            entries=os.listdir(train_dir)
-            if entries not in choosen_dirs:
-                remain_dirs.append(entries)
-        return remain_dirs
-
     def set_img_sidelength(self, new_img_sidelength):
         """For multi-resolution training: Updates the image sidelength with whichimages are loaded."""
         for instance in self.all_instances:

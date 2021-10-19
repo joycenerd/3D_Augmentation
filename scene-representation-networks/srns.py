@@ -360,7 +360,7 @@ class SRNsModel(nn.Module):
         
         # Inference time - Save 3D information (open in testing time)
         # '''
-        pc_dir_path = os.path.join("/home/zchin/augmentation_output/SRN/test/real_0.3") #, "%s_train" %(category))
+        pc_dir_path = os.path.join("/home/zchin/augmentation_output/SRN/test/real_0.X") #, "%s_train" %(category))
         os.makedirs(pc_dir_path, exist_ok=True)
         pc_path = pc_dir_path + '/' + str(instance_idcs.item()) + '_' + gt_path.split('/')[-1][:-4]
         np.save( pc_path + "_embedding.npy", self.embedding.cpu().numpy())
