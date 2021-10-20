@@ -71,10 +71,7 @@ def save_point_cloud(root_path, output_dir, choosen_path):
 
 if __name__ == "__main__":
     
-    root_path = f"/home/zchin/augmentation_output/SRN/test/real_{args.ratio}"
-    output_dir = f"/home/zchin/augmentation_output/3D_points/real_{args.ratio}"
-    choosen_path = f"/home/zchin/augmentation_output/ratio_data/{args.ratio}/test_data_path.txt"
-    print(root_path)
-    print(output_dir)
-    print(choosen_path)
-    # save_point_cloud(root_path, output_dir, choosen_path)
+    root_path = f"/eva_data_0/augmentation_output/SRN/test/real_{args.ratio}"
+    output_dir = f"/eva_data_0/augmentation_output/3D_points/real_{args.ratio}"
+    choosen_path = f"/eva_data_0/augmentation_output/ratio_data/{args.ratio}/test_data_path.txt"
+    save_point_cloud(root_path, output_dir, choosen_path)

@@ -48,7 +48,7 @@ p.add_argument('--kl_weight', type=float, default=1,
 p.add_argument('--reg_weight', type=float, default=1e-3,
                help='Weight for depth regularization term (lambda_depth in paper).')
 
-p.add_argument('--steps_til_ckpt', type=int, default=2500,
+p.add_argument('--steps_til_ckpt', type=int, default=10000,
                help='Number of iterations until checkpoint is saved.')
 p.add_argument('--steps_til_val', type=int, default=1000,
                help='Number of iterations until validation set is run.')
@@ -286,7 +286,7 @@ def train():
                 if iter % opt.steps_til_ckpt == 0:
                     util.custom_save(model,
                                      os.path.join(
-                                         ckpt_dir, 'epoch_%04d_iter_%06d.pth' % (epoch, iter)),
+                                         ckpt_dir, 'epoch_%04d_iter_%07d.pth' % (epoch, iter)),
                                      discriminator=None,
                                      optimizer=optimizer)
 
@@ -296,7 +296,7 @@ def train():
 
     util.custom_save(model,
                      os.path.join(
-                         ckpt_dir, 'epoch_%04d_iter_%06d.pth' % (epoch, iter)),
+                         ckpt_dir, 'epoch_%04d_iter_%07d.pth' % (epoch, iter)),
                      discriminator=None,
                      optimizer=optimizer)
 

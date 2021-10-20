@@ -62,11 +62,11 @@ class SRNsModel(nn.Module):
     def __init__(self,
                  latent_dim,
                  tracing_steps,
+                 mode,
+                 ratio,
                  has_params=False,
                  use_unet_renderer=False,
                  freeze_networks=False,
-                 mode,
-                 ratio
                  ):
         super().__init__()
 
@@ -365,7 +365,7 @@ class SRNsModel(nn.Module):
         # Inference time - Save 3D information (open in testing time)
         # '''
         if self.mode =="test":
-            pc_dir_path = os.path.join(f"/home/zchin/augmentation_output/SRN/test/real_{self.ratio}") #, "%s_train" %(category))
+            pc_dir_path = os.path.join(f"/eva_data_0/augmentation_output/SRN/test/real_{self.ratio}") #, "%s_train" %(category))
             os.makedirs(pc_dir_path, exist_ok=True)
             pc_path = pc_dir_path + '/' + str(instance_idcs.item()) + '_' + gt_path.split('/')[-1][:-4]
             np.save( pc_path + "_embedding.npy", self.embedding.cpu().numpy())
