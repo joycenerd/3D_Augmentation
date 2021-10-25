@@ -8,17 +8,22 @@ import matplotlib as mpl
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import sys
-sys.path.append("/work/eva0856121/Augmentation/code/data_utils")
-from data_utils.utils import *
+# sys.path.append("/work/eva0856121/Augmentation/code/data_utils")
+sys.path.append("/home/zchin/3D_Augmentation/PointNet")
+from data_utils.utils_old import *
 from PointNet import provider
 
 # mpl.use("TkAgg")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--path_1", type=str, default="/eva_data/psa/source_code/PCN/demo_data/car.pcd", help="1st input data path.")
-parser.add_argument("--path_2", type=str, default="/eva_data/psa/source_code/PCN/demo_data/airplane.pcd", help="2nd input data path.")
-parser.add_argument("--path_3", type=str, default="/eva_data/psa/source_code/PCN/demo_data/chair.pcd", help="3rd input data path.")
-parser.add_argument("--path_4", type=str, default="/eva_data/psa/source_code/PCN/demo_data/lamp.pcd", help="4th input data path.")
+# parser.add_argument("--path_1", type=str, default="/eva_data/psa/source_code/PCN/demo_data/car.pcd", help="1st input data path.")
+# parser.add_argument("--path_2", type=str, default="/eva_data/psa/source_code/PCN/demo_data/airplane.pcd", help="2nd input data path.")
+# parser.add_argument("--path_3", type=str, default="/eva_data/psa/source_code/PCN/demo_data/chair.pcd", help="3rd input data path.")
+# parser.add_argument("--path_4", type=str, default="/eva_data/psa/source_code/PCN/demo_data/lamp.pcd", help="4th input data path.")
+parser.add_argument("--path_1", type=str, default="/eva_data_0/augmentation_output/3D_points/real_0.3/airplane/000000.pcd", help="1st input data path.")
+parser.add_argument("--path_2", type=str, default="/eva_data_0/augmentation_output/3D_points/real_0.3/car/001671.pcd", help="2nd input data path.")
+parser.add_argument("--path_3", type=str, default="/eva_data_0/augmentation_output/3D_points/real_0.3/chair/001808.pcd", help="3rd input data path.")
+parser.add_argument("--path_4", type=str, default="/eva_data_0/augmentation_output/3D_points/real_0.3/lamp/003485.pcd", help="4th input data path.")
 parser.add_argument("--dir_path", type=str, default=None, help="The directory path of input data.")
 parser.add_argument("--dir_path_sample", type=str, default=None, help="The directory path of input data.")
 parser.add_argument("--certain_obj", type=str, default=None, help="The certain object in directory path you want to visualize.")
@@ -168,4 +173,5 @@ if __name__ == "__main__":
         plot_pcd(224, fig, pcds["original"][idx+3], filepaths["original"][idx+3].split("/")[-1])
         # plot_pcd(224, fig, pcds_sample[idx+3], filepaths[idx+3].split("/")[-1], split="sample")
         plt.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=0)
-        plt.show()
+        # plt.show()
+        plt.savefig("0.3.png")
