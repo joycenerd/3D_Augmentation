@@ -68,7 +68,8 @@ def test():
                          batch_size=1,
                          shuffle=False,
                          drop_last=False)
-
+    print(f"Data loaded...")
+    print(f"test data size: {len(dataset)}...")
     model = SRNsModel(# num_instances=opt.num_instances,
                       latent_dim=opt.embedding_size,
                       has_params=opt.has_params,
