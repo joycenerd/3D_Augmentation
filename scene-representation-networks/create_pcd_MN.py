@@ -7,13 +7,15 @@ import argparse
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--ratio',type=float, required=True, help='real data ratio')
+parser.add_argument('--iter',type=int,required=True,help='SRN training iteration')
+parser.add_argument('--class_name',type=str,required=True,help='The class want to train')
 args=parser.parse_args()
 
-data_root = "/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_train/"
-instance_dirs = sorted(os.listdir(data_root))
-cate_list = []
-for instance_dir in instance_dirs:
-    cate_list.append(instance_dir.split("_")[0])
+# data_root = "/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128/all/all_train/"
+# instance_dirs = sorted(os.listdir(data_root))
+# cate_list = []
+# for instance_dir in instance_dirs:
+#     cate_list.append(instance_dir.split("_")[0])
 
 def pred_2_rgb(img):
     img += 1.
@@ -71,7 +73,7 @@ def save_point_cloud(root_path, output_dir, choosen_path):
 
 if __name__ == "__main__":
     
-    root_path = f"/eva_data_0/augmentation_output/SRN/test/real_{args.ratio}"
-    output_dir = f"/eva_data_0/augmentation_output/3D_points/real_{args.ratio}"
-    choosen_path = f"/eva_data_0/augmentation_output/ratio_data/{args.ratio}/test_data_path.txt"
+    root_path = f"/eva_data_0/augment_output_single_version/SRN/test/{args.class_name}/real_{args.ratio}/3D_info"
+    output_dir = f"/eva_data_0/augment_output_single_version/3D_points/iter_{args.iter}/{args.class_name}/real_{args.ratio}"
+    choosen_path = f"/eva_data_0/augment_output_single_version/ratio_data/{args.class_name}/{args.ratio}/test_data_path.txt"
     save_point_cloud(root_path, output_dir, choosen_path)

@@ -64,6 +64,7 @@ class SRNsModel(nn.Module):
                  tracing_steps,
                  mode,
                  ratio,
+                 class_name,
                  has_params=False,
                  use_unet_renderer=False,
                  freeze_networks=False,
@@ -80,6 +81,7 @@ class SRNsModel(nn.Module):
         self.freeze_networks = freeze_networks
         self.mode = mode
         self.ratio = ratio
+        self.class_name = class_name
         
         resnet = torchvision.models.resnet18(pretrained=True)
         self.resnet = nn.Sequential(*list(resnet.children())[:-1])
@@ -365,7 +367,7 @@ class SRNsModel(nn.Module):
         # Inference time - Save 3D information (open in testing time)
         # '''
         if self.mode =="test":
-            pc_dir_path = os.path.join(f"/eva_data_0/augmentation_output/SRN/test/real_{self.ratio}/3D_info") #, "%s_train" %(category))
+            pc_dir_path = os.path.join(f"/eva_data_0/augment_output_single_version/SRN/test/{self.class_name}/real_{self.ratio}/3D_info") #, "%s_train" %(category))
             os.makedirs(pc_dir_path, exist_ok=True)
             pc_path = pc_dir_path + '/' + str(instance_idcs.item()) + '_' + gt_path.split('/')[-1][:-4]
             np.save( pc_path + "_embedding.npy", self.embedding.cpu().numpy())

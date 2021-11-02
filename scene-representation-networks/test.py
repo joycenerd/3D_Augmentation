@@ -44,7 +44,8 @@ p.add_argument('--embedding_size', type=int, default=256,
                help='Dimensionality of latent embedding.')
 p.add_argument('--gpu',type=str,required=True)
 p.add_argument("--ratio", type=float, required=True, help="The ratio of real data")
-
+p.add_argument("--class_name", type=str, required=True, help="The class want to train")
+p.add_argument("--train_class", type=str, required=True, help="Choose category to train")
 opt = p.parse_args()
 
 device = torch.device(opt.gpu)
@@ -76,6 +77,7 @@ def test():
                       use_unet_renderer=opt.use_unet_renderer,
                       tracing_steps=opt.tracing_steps,
                       mode="test",
+                      train_class=opt.train_class,
                       ratio=opt.ratio)
 
     assert (opt.checkpoint_path is not None), "Have to pass checkpoint!"

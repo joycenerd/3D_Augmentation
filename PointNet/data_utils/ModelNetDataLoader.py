@@ -91,14 +91,14 @@ class ModelNetDataLoader(Dataset):
                 self.datapath.append((class_name,file_path))
             
             # load augment data
-            """for class_name in self.class_names:
+            for class_name in self.class_names:
                 file_dir = os.path.join(augment_data_dir, class_name)
                 if os.path.exists(file_dir):
                     filenames = os.listdir(file_dir)
                     for filename in filenames:
                         # if "aug" not in filename:
                         file_path = os.path.join(file_dir, filename)
-                        self.datapath.append((class_name, file_path))"""
+                        self.datapath.append((class_name, file_path))
                 
         
         

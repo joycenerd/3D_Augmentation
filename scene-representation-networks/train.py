@@ -79,7 +79,7 @@ p.add_argument('--max_num_observations_val', type=int, default=10, required=Fals
 
 p.add_argument('--has_params', action='store_true', default=False,
                help='Whether each object instance already comes with its own parameter vector.')
-p.add_argument("--train_class", type=str, required=False,
+p.add_argument("--train_class", type=str, required=True,
                help="Choose category to train")
 
 
@@ -149,6 +149,7 @@ def train():
                       use_unet_renderer=opt.use_unet_renderer,
                       tracing_steps=opt.tracing_steps,
                       freeze_networks=opt.freeze_networks,
+                      class_name = opt.train_class,
                       mode="train",
                       ratio=opt.ratio)
 
@@ -318,6 +319,7 @@ def save_mode_feature():
                       use_unet_renderer=opt.use_unet_renderer,
                       tracing_steps=opt.tracing_steps,
                       mode="train",
+                      class_name = opt.train_class,
                       ratio=opt.ratio
                       )
     for child in model.children():
