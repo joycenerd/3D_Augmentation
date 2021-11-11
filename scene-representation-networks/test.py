@@ -71,13 +71,14 @@ def test():
                          drop_last=False)
     print(f"Data loaded...")
     print(f"test data size: {len(dataset)}...")
+    print(opt.train_class)
     model = SRNsModel(# num_instances=opt.num_instances,
                       latent_dim=opt.embedding_size,
                       has_params=opt.has_params,
                       use_unet_renderer=opt.use_unet_renderer,
                       tracing_steps=opt.tracing_steps,
                       mode="test",
-                      train_class=opt.train_class,
+                      class_name=opt.train_class,
                       ratio=opt.ratio)
 
     assert (opt.checkpoint_path is not None), "Have to pass checkpoint!"

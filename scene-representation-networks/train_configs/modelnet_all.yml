@@ -6,7 +6,7 @@ val_root: # Path to cars validation set, consisting of the same cars as in the t
 # logging_root: ./logs/modelnet_all_exp
 img_sidelengths: 64, 128 
 batch_size_per_img_sidelength: 16, 4 # This is for a GPU with 48 GB of memory. Adapt accordingly for your GPU memory.
-max_steps_per_img_sidelength: 5000, 10000000
+max_steps_per_img_sidelength: 5000, 20100
 max_num_instances_train: -1
 no_validation: True
 # specific_observation_idcs: None #64

@@ -7,7 +7,7 @@ import numpy as np
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--ratio', type=float, required=True , help='real data ratio')
-parser.add_argument('--data-root', type=str, default='/eva_data_6/datasets_raw/ModelNet40_auto_aligned_128',help='complete training data path')
+parser.add_argument('--data-root', type=str, default='/eva_data_eva_data_Augmentation/datasets_raw/ModelNet40_auto_aligned_128',help='complete training data path')
 parser.add_argument('--out-dir', type=str, default='/eva_data_0/augment_output_single_version/ratio_data')
 parser.add_argument('--class_name', type=str, required=True)
 args=parser.parse_args()
