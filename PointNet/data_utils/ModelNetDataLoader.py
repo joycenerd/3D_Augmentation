@@ -51,11 +51,12 @@ obj_name_files = {"ModelNet40": "ModelNet40_names.txt", #"ModelNet40_ourDA10_nam
     return rotated_pcd.astype(np.float32)"""
 
 class ModelNetDataLoader(Dataset):
-    def __init__(self,  npoint=1024, split="train", sparsify_mode="PN", dataset_mode="ModelNet40", zorder_mode="keep", cache_size=15000,data_txt=None,augment_data_dir=None):
+    def __init__(self,  npoint=1024, split="train", sparsify_mode="PN", dataset_mode="ModelNet40", zorder_mode="keep", cache_size=15000,data_txt=None,augment_data_dir=None,ratio=None):
         self.npoints = npoint
         self.sparsify_mode = "random"  #sparsify_mode
         self.zorder_mode = zorder_mode
         self.data_txt=data_txt
+        self.ratio=ratio
 
         assert (dataset_mode == "ModelNet40" or dataset_mode == "ModelNet10" or dataset_mode == "ShapeNet" or dataset_mode == "ShapeNet_all"), "PLZ verify dataset_mode should be [ModelNet40, ModelNet10, ShapeNet, ShapeNet_all]"
         root_dir = root_dirs[dataset_mode]
@@ -92,16 +93,14 @@ class ModelNetDataLoader(Dataset):
             
             # load augment data
             for class_name in self.class_names:
-                file_dir = os.path.join(augment_data_dir, class_name)
+                file_dir = os.path.join(augment_data_dir, f'iter_200000/{class_name}/real_{self.ratio}/{class_name}')
                 if os.path.exists(file_dir):
                     filenames = os.listdir(file_dir)
                     for filename in filenames:
                         # if "aug" not in filename:
                         file_path = os.path.join(file_dir, filename)
                         self.datapath.append((class_name, file_path))
-                
-        
-        
+                 
         print("The size of %s data is %d" % (split, len(self.datapath)))
 
         # Record loaded data
@@ -109,10 +108,12 @@ class ModelNetDataLoader(Dataset):
         self.cache = {}  # From index to (points, target) tuple
     
     def load_choosen_data(self):
-        f = open(self.data_txt,'r', encoding='utf-8')
         choosen_dirs = []
-        for line in f:
-            choosen_dirs.append(line.strip())
+        for class_name in self.class_names:
+            train_data_path=os.path.join(self.data_txt,class_name,str(self.ratio),'train_data_path.txt')
+            f = open(train_data_path,'r', encoding='utf-8')
+            for line in f:
+                choosen_dirs.append(line.strip())
         return choosen_dirs
 
     def __getitem__(self, index):
