@@ -29,26 +29,32 @@ def main(args):
     # output = args.output if args.output is not None else '.' + args.type
     for category_dir in os.listdir(args.data_root):
         category_path=Path(args.data_root).joinpath(category_dir)
+        if not os.path.isdir(category_path):
+            print(category_dir)
+            continue 
         out_category_path=Path(args.output_root).joinpath(category_dir)
         if not os.path.isdir(out_category_path):
             os.makedirs(Path(out_category_path).joinpath('train'))
             os.makedirs(Path(out_category_path).joinpath('test'))
-        for mode in os.listdir(category_path): 
+        for mode in os.listdir(category_path):
             with os.scandir(Path(category_path).joinpath(mode)) as entries:
                 for entry in entries:
-                    if entry.is_file():
-                        if os.path.splitext(entry)[1]=='.off':
-                            in_filename=Path(category_path).joinpath(mode,entry.name)
-                            out_entry=entry.name[:-3]+'obj'
-                            out_filename=Path(out_category_path).joinpath(mode,out_entry)
-                            in_filename=str(in_filename)
-                            out_filename=str(out_filename)
-                            result = mt.convert(in_filename, out_filename, up_conversion)
-                            # if args.output is None:
-                                # print(result)
-                            with open(out_filename, 'w') as f:
-                                f.write(result)
-                            print(f'{out_filename} complete...')
+                    entry_path=os.path.join(category_path,mode,entry.name,f'{entry.name}.off')
+                    entry_name=entry.name
+                    # print(entry_path)
+                    # if os.path.splitext(entry)[1]=='.off':
+                    if os.path.exists(entry_path):
+                        in_filename=entry_path
+                        out_entry=entry.name+'.obj'
+                        out_filename=Path(out_category_path).joinpath(mode,out_entry)
+                        in_filename=str(in_filename)
+                        out_filename=str(out_filename)
+                        result = mt.convert(in_filename, out_filename, up_conversion)
+                        # if args.output is None:
+                            # print(result)
+                        with open(out_filename, 'w') as f:
+                            f.write(result)
+                        print(f'{out_filename} complete...')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -65,8 +71,8 @@ if __name__ == '__main__':
                         help="Initial up vector")
     parser.add_argument('-tu', '--to-up', metavar='fup', default=None,
                         help="Output up vector")
-    parser.add_argument('--data-root',type=str,default="/eva_data_7/modelnet40_auto_aligned")
-    parser.add_argument('--output-root',type=str,default='/eva_data_7/modelnet40_auto_aligned_obj')
+    parser.add_argument('--data-root',type=str,default="/eva_data_eva_data_Augmentation/datasets_raw/ModelNet40_auto_aligned")
+    parser.add_argument('--output-root',type=str,default='/eva_data_eva_data_Augmentation/datasets_raw/ModelNet40_auto_aligned_obj')
     args = parser.parse_args()
     args.func(args)
 
