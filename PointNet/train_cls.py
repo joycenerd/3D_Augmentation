@@ -37,6 +37,7 @@ parser.add_argument("--zorder_mode", type=str, default="keep", choices=["keep", 
 parser.add_argument("--trans_feat", action="store_true", default=False, help='Whether to use transform feature')
 parser.add_argument('--data-txt',type=str,help="training data txt file")
 parser.add_argument('--augment_data_dir',type=str,help='directory that store augmented pcd file')
+parser.add_argument('--ratio',type=float,default=0.7,help='real data ratio')
 args = parser.parse_args()
 
 # HYPER PARAMETER
@@ -93,7 +94,7 @@ def create_dataloader():
     print("Load " + args.dataset_mode + " as dataset ...")
 
     # Create training dataloader
-    TRAIN_DATASET = ModelNetDataLoader(npoint=args.num_point, split="train", sparsify_mode=args.sparsify_mode, dataset_mode=args.dataset_mode, zorder_mode=args.zorder_mode,data_txt=args.data_txt,augment_data_dir=args.augment_data_dir)
+    TRAIN_DATASET = ModelNetDataLoader(npoint=args.num_point, split="train", sparsify_mode=args.sparsify_mode, dataset_mode=args.dataset_mode, zorder_mode=args.zorder_mode,data_txt=args.data_txt,augment_data_dir=args.augment_data_dir,ratio=args.ratio)
     trainDataLoader = torch.utils.data.DataLoader(TRAIN_DATASET, batch_size=args.batch_size, shuffle=True, num_workers=4, drop_last=True)
     
     # Create testing dataloader
@@ -233,55 +234,55 @@ if __name__ == "__main__":
     trainDataLoader, testDataLoader = create_dataloader()
 
     # Create network (classifier), optimizer, scheduler
-    classifier, criterion, optimizer, scheduler, start_epoch = create_network()
+    # classifier, criterion, optimizer, scheduler, start_epoch = create_network()
 
-    # Setup parameters for training and testing
-    global_epoch = 0
-    best_instance_acc = 0.0
-    best_class_acc = 0.0
+    # # Setup parameters for training and testing
+    # global_epoch = 0
+    # best_instance_acc = 0.0
+    # best_class_acc = 0.0
 
-    # Start training
-    logger.info("Start training...")
-    for epoch in range(start_epoch, args.epoch):
-        log_string("Epoch %d (%d/%s):" % (global_epoch+1, epoch+1, args.epoch))
+    # # Start training
+    # logger.info("Start training...")
+    # for epoch in range(start_epoch, args.epoch):
+    #     log_string("Epoch %d (%d/%s):" % (global_epoch+1, epoch+1, args.epoch))
 
-        # TRAIN MODE
-        train_instance_acc = train(classifier, trainDataLoader, optimizer, scheduler, criterion)
-        log_string("Train Instance Accuracy: %f" % (train_instance_acc))
+    #     # TRAIN MODE
+    #     train_instance_acc = train(classifier, trainDataLoader, optimizer, scheduler, criterion)
+    #     log_string("Train Instance Accuracy: %f" % (train_instance_acc))
 
-        # TEST MODE
-        with torch.no_grad():
-            instance_acc, class_acc = test(classifier.eval(), testDataLoader)
+    #     # TEST MODE
+    #     with torch.no_grad():
+    #         instance_acc, class_acc = test(classifier.eval(), testDataLoader)
 
-            if instance_acc >= best_instance_acc:
-                best_instance_acc = instance_acc
-                best_epoch = epoch + 1
+    #         if instance_acc >= best_instance_acc:
+    #             best_instance_acc = instance_acc
+    #             best_epoch = epoch + 1
 
-            if class_acc >= best_class_acc:
-                best_class_acc = class_acc
+    #         if class_acc >= best_class_acc:
+    #             best_class_acc = class_acc
 
-            log_string("Test Instance Accuracy: %f, Class Accuracy: %f" % (instance_acc, class_acc))
-            log_string("Best Instance Accuracy: %f, Class Accuracy: %f" % (best_instance_acc, best_class_acc))
+    #         log_string("Test Instance Accuracy: %f, Class Accuracy: %f" % (instance_acc, class_acc))
+    #         log_string("Best Instance Accuracy: %f, Class Accuracy: %f" % (best_instance_acc, best_class_acc))
 
-        # Save best training details
-        if instance_acc >= best_instance_acc:
-            logger.info("Save model...")
-            save_path = os.path.join(checkpoints_dir, "best_model.pth")
-            log_string("Saving at %s" % (save_path))
-            state = {
-                "epoch": best_epoch,
-                "instance_acc": instance_acc,
-                "class_acc": class_acc,
-                "model_state_dict": classifier.state_dict(),
-                "optimizer_state_dict": optimizer.state_dict(),
-            }
-            torch.save(state, save_path)
-        global_epoch += 1
+    #     # Save best training details
+    #     if instance_acc >= best_instance_acc:
+    #         logger.info("Save model...")
+    #         save_path = os.path.join(checkpoints_dir, "best_model.pth")
+    #         log_string("Saving at %s" % (save_path))
+    #         state = {
+    #             "epoch": best_epoch,
+    #             "instance_acc": instance_acc,
+    #             "class_acc": class_acc,
+    #             "model_state_dict": classifier.state_dict(),
+    #             "optimizer_state_dict": optimizer.state_dict(),
+    #         }
+    #         torch.save(state, save_path)
+    #     global_epoch += 1
 
-        # Save weights and [training, testing] results
-        # if epoch % 5 == 0:
-        #     torch.save(state, os.path.join(checkpoints_dir, "model_%d.pth" %(epoch)))
-        np.save(os.path.join(output_dir, "train_save.npy"), train_save)
-        np.save(os.path.join(output_dir, "test_save.npy"), test_save)
+    #     # Save weights and [training, testing] results
+    #     # if epoch % 5 == 0:
+    #     #     torch.save(state, os.path.join(checkpoints_dir, "model_%d.pth" %(epoch)))
+    #     np.save(os.path.join(output_dir, "train_save.npy"), train_save)
+    #     np.save(os.path.join(output_dir, "test_save.npy"), test_save)
 
-    logger.info("End of training...")
+    # logger.info("End of training...")
