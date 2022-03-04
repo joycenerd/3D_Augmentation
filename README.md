@@ -1,9 +1,10 @@
 # 3D Point Cloud Data Augmentation via Scene Representation Network
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+### [Report](https://drive.google.com/file/d/1XF3-HgFmed018xAC_xDLn8aQQKn7F5xI/view?usp=sharing) | [Slides]()
+
 ## Teammate
-* Zhi-Yi Chin: joycenerd.cs09@nycu.edu.tw
-* Chieh-Ming Jiang: nax1016.cs10@nycu.edu.tw
+_[Pei-Tse Chiang](mailto:ztex080104518.cs08g@nctu.edu.tw), [Meng-Hsun Tsai](mailto:infiniteSky.cs08g@nctu.edu.tw), [Zhi-Yi Chin](mailto:joycenerd.cs09@nycu.edu.tw), [Chieh-Ming Jiang](mailto:nax1016.cs10@nycu.edu.tw)_
 
 ## Introduction
 We design a 3D point cloud augmentation based on a novel view synthesis method, [SRN](https://arxiv.org/pdf/1906.01618.pdf). The 3D point cloud is a set of data points in 3D space, consisting of coordinates in world space and RGB color information. However, the precision is limited if there are insufficient points to describe the objects. Moreover, the amount of point cloud training samples is also limited, leading to the poor diversity of data. This motivates us to design a data augmentation method for the point cloud. As our base model, given extrinsic and intrinsic matrix, the SRN model can estimate the world coordinate and get the corresponding depth and RGB color information, which can easily be transferred to point cloud form. After the SRN model is trained, we can render new images of unseen views by changing the extrinsic matrix and consequently realize the point cloud augmentation. To verify whether the augmented point cloud is good enough to describe the 3D objects, we use [PointNet](https://arxiv.org/pdf/1612.00593.pdf) as our evaluation model to evaluate the quality of the augmentation.
@@ -107,7 +108,7 @@ If you find our work useful in your project, please cite:
 ```bibtex
 @misc{
     title = {3D Point Cloud Data Augmentation via Scene Representation Network},
-    author = {Zhi-Yi Chin, Chieh-Ming Jiang},
+    author = {Pei-Tse Chiang, Meng-Hsun Tsai, Zhi-Yi Chin, Chieh-Ming Jiang},
     url = {https://github.com/joycenerd/3D_Augmentation},
     year = {2022}
 }
