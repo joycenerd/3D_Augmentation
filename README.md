@@ -1,5 +1,6 @@
 # 3D Point Cloud Data Augmentation via Scene Representation Network
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Security Status](https://s.murphysec.com/badge/joycenerd/3D_Augmentation.svg)](https://www.murphysec.com/p/joycenerd/3D_Augmentation)
 
 ### [Report](https://drive.google.com/file/d/1XF3-HgFmed018xAC_xDLn8aQQKn7F5xI/view?usp=sharing) | [Slides](https://drive.google.com/file/d/1dHznm4XqJaUoDaTqxrBWyHligGb5O0d4/view?usp=sharing)
 
